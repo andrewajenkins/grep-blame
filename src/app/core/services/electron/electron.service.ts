@@ -7,7 +7,7 @@ import * as childProcess from 'child_process';
 import * as fs from 'fs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ElectronService {
   ipcRenderer!: typeof ipcRenderer;
@@ -52,5 +52,13 @@ export class ElectronService {
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);
+  }
+
+  doGrep() {
+    this.ipcRenderer.send('run-git-command', 'git status');
+
+    this.ipcRenderer.on('git-command-result', (event, arg) => {
+      console.log(arg);
+    });
   }
 }

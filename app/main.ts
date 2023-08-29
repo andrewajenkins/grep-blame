@@ -1,13 +1,13 @@
-import {app, BrowserWindow, screen} from 'electron';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import { exec } from 'child_process';
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
-  serve = args.some(val => val === '--serve');
+  serve = args.some((val) => val === '--serve');
 
 function createWindow(): BrowserWindow {
-
   const size = screen.getPrimaryDisplay().workAreaSize;
 
   // Create the browser window.
@@ -18,7 +18,7 @@ function createWindow(): BrowserWindow {
     height: size.height,
     webPreferences: {
       nodeIntegration: true,
-      allowRunningInsecureContent: (serve),
+      allowRunningInsecureContent: serve,
       contextIsolation: false,
     },
   });
@@ -34,7 +34,7 @@ function createWindow(): BrowserWindow {
     let pathIndex = './index.html';
 
     if (fs.existsSync(path.join(__dirname, '../dist/index.html'))) {
-       // Path when running electron in local folder
+      // Path when running electron in local folder
       pathIndex = '../dist/index.html';
     }
 
@@ -77,7 +77,17 @@ try {
     }
   });
 
+  ipcMain.on('run-git-command', (event, arg) => {
+    exec(arg, (error, stdout, stderr) => {
+      if (error) {
+        event.reply('git-command-result', `error: ${error}`);
+        return;
+      }
+      event.reply('git-command-result', stdout);
+    });
+  });
 } catch (e) {
+  console.error(e);
   // Catch Error
   // throw e;
 }
