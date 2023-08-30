@@ -8,6 +8,7 @@ export interface RipGrepResult {
   fileName: string;
   commit: string;
   blame: string;
+  dateTime: string;
   lineNum: string;
   content: string;
 }
@@ -100,10 +101,11 @@ export class RipGrep implements RipGrepSearch {
         try {
           const fileName = result.split(':')[0]; //^(.*?):
           const commit = result.match(/:(.*?)\s/)![1];
-          const blame = result.match(/\((.*?)\s-/)![1];
+          const blame = result.match(/\((.*?)\d{4}/)![1];
+          const dateTime = result.match(/\(.*?\s([\d-]+\s[\d:]+\s[\d\-]+)/)![1];
           const lineNum = result.match(/\s([0-9]+)\)/)![1];
           const content = result.match(/\)\s(.*)/)![1];
-          const structuredResult = { fileName, commit, blame, lineNum, content };
+          const structuredResult = { fileName, commit, blame, dateTime, lineNum, content };
           console.log('structuredResult:', structuredResult);
           const example =
             './src/app/detail/detail.component.ts:80ff07b8b (Andy Jenkins 2023-08-29 14:13:15 -0700 8) export class DetailComponent implements OnInit {';

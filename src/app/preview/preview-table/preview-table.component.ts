@@ -8,5 +8,5 @@ import { RipGrepResult } from '../../../../app/commands/ripgrep';
 })
 export class PreviewTableComponent {
   @Input() dataSource: RipGrepResult[] = [];
-  displayedColumns = ['fileName', 'commit', 'blame', 'lineNum', 'content'];
+  displayedColumns = ['fileName', 'commit', 'blame', 'dateTime', 'lineNum'];
 }
