@@ -4,6 +4,13 @@ export interface RipGrepSearch {
   pattern: string;
   directory: string;
 }
+export interface RipGrepResult {
+  fileName: string;
+  commit: string;
+  blame: string;
+  lineNum: string;
+  content: string;
+}
 export class RipGrep implements RipGrepSearch {
   fileTypes: string[];
   pattern: string;
@@ -49,7 +56,7 @@ export class RipGrep implements RipGrepSearch {
     });
   }
 
-  private async doBlame(results: string): Promise<string[][]> {
+  private async doBlame(results: string): Promise<any[]> {
     const blameResults: string[][] = [];
     const jsonResults = results
       .split('\n')
@@ -60,10 +67,10 @@ export class RipGrep implements RipGrepSearch {
       if (result.type === 'match') {
         const filePath = result.data.path.text;
         const lineNumber = result.data.line_number;
-        console.log('filePath:', filePath, 'lineNumber:', lineNumber);
+        // console.log('filePath:', filePath, 'lineNumber:', lineNumber);
         try {
           const blame = await this.gitBlame(filePath, lineNumber);
-          blameResults.push(blame.split('\n'));
+          blameResults.push(blame);
         } catch (error) {
           console.error(`Error blaming ${filePath}:${lineNumber}:`, error);
         }
@@ -73,7 +80,7 @@ export class RipGrep implements RipGrepSearch {
     return blameResults;
   }
 
-  private gitBlame(filePath: string, lineNumber: number): Promise<string> {
+  private gitBlame(filePath: string, lineNumber: number): Promise<any> {
     return new Promise((resolve, reject) => {
       const git = spawn('git', ['blame', '-L', `${lineNumber},${lineNumber}`, filePath]);
 
@@ -89,10 +96,25 @@ export class RipGrep implements RipGrepSearch {
       });
 
       git.on('close', (code) => {
-        if (code !== 0) {
-          reject(new Error(`git blame process exited with code ${code}: ${error}`));
-        } else {
-          resolve(result);
+        console.log('result:', result);
+        try {
+          const fileName = result.split(':')[0]; //^(.*?):
+          const commit = result.match(/:(.*?)\s/)![1];
+          const blame = result.match(/\((.*?)\s-/)![1];
+          const lineNum = result.match(/\s([0-9]+)\)/)![1];
+          const content = result.match(/\)\s(.*)/)![1];
+          const structuredResult = { fileName, commit, blame, lineNum, content };
+          console.log('structuredResult:', structuredResult);
+          const example =
+            './src/app/detail/detail.component.ts:80ff07b8b (Andy Jenkins 2023-08-29 14:13:15 -0700 8) export class DetailComponent implements OnInit {';
+          if (code !== 0) {
+            reject(new Error(`git blame process exited with code ${code}: ${error}`));
+          } else {
+            resolve(structuredResult);
+          }
+        } catch (error) {
+          console.error('failed to parse:', result, error);
+          resolve({});
         }
       });
     });

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Action, CommandService } from '../core/services/command/command.service';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,10 @@ export class HomeComponent implements OnInit {
   columnsToDisplay = ['name', 'weight', 'symbol', 'position'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement!: PeriodicElement | null;
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private commandService: CommandService,
+  ) {}
 
   ngOnInit(): void {
     console.log('HomeComponent INIT');

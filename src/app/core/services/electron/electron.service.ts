@@ -5,11 +5,15 @@ import { Injectable } from '@angular/core';
 import { ipcRenderer, webFrame } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
+import { Subject } from 'rxjs';
+import { Action, Command } from '../command/command.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ElectronService {
+  private electronSubject = new Subject<any>();
+  electron$ = this.electronSubject.asObservable();
   ipcRenderer!: typeof ipcRenderer;
   webFrame!: typeof webFrame;
   childProcess!: typeof childProcess;
@@ -61,6 +65,8 @@ export class ElectronService {
     this.ipcRenderer.on('git-command-result', (event, arg: string[][]) => {
       console.log('fe1', JSON.stringify(arg, null, 2));
       this.result = arg;
+      this.electronSubject.next(arg);
     });
+    return this.electron$;
   }
 }

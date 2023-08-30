@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ThemeService } from '../core/services/style/theme.service';
 import { ElectronService } from '../core/services';
+import { Action, CommandService } from '../core/services/command/command.service';
 
 @Component({
   selector: 'app-main-toolbar',
@@ -12,6 +13,7 @@ export class MainToolbarComponent {
   constructor(
     private themeService: ThemeService,
     private electron: ElectronService,
+    private commandService: CommandService,
   ) {}
 
   ngDoCheck() {
@@ -25,6 +27,12 @@ export class MainToolbarComponent {
 
   gitStatus() {
     console.log('gitStatus');
-    this.result = this.electron.doGrep();
+    this.result = this.electron.doGrep().subscribe((res) => {
+      this.result = res;
+      this.commandService.send({
+        action: Action.PREVIEW_DATA,
+        payload: res,
+      });
+    });
   }
 }
