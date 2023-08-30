@@ -3,6 +3,7 @@
 // styles.scss
 
 @import 'src/styles/variables';
+@import 'highlight.js/styles/default.css';
 
 :root {
   --background-color: #{$background-color-light};
