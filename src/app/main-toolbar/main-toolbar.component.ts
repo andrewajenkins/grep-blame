@@ -8,10 +8,15 @@ import { ElectronService } from '../core/services';
   styleUrls: ['./main-toolbar.component.scss'],
 })
 export class MainToolbarComponent {
+  result: any;
   constructor(
     private themeService: ThemeService,
     private electron: ElectronService,
   ) {}
+
+  ngDoCheck() {
+    this.result = this.electron.result;
+  }
   toggleTheme() {
     console.log('tobbleTheme');
     const isDarkTheme = this.themeService.isDarkTheme();
@@ -20,6 +25,6 @@ export class MainToolbarComponent {
 
   gitStatus() {
     console.log('gitStatus');
-    this.electron.doGrep();
+    this.result = this.electron.doGrep();
   }
 }

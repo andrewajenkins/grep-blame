@@ -14,7 +14,7 @@ export class ElectronService {
   webFrame!: typeof webFrame;
   childProcess!: typeof childProcess;
   fs!: typeof fs;
-
+  result: any;
   constructor() {
     // Conditional imports
     if (this.isElectron) {
@@ -60,6 +60,7 @@ export class ElectronService {
 
     this.ipcRenderer.on('git-command-result', (event, arg: string[]) => {
       console.log('fe1', JSON.stringify(arg, null, 2));
+      this.result = arg;
     });
   }
 }
