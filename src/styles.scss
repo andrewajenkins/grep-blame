@@ -3,7 +3,11 @@
 // styles.scss
 
 @import 'src/styles/variables';
-@import 'highlight.js/styles/default.css';
+//@import 'highlight.js/styles/github.css'; /* Light theme */
+//  @import 'highlight.js/styles/dark.css';
+/* styles.css */
+//@import 'highlight.js/styles/github.css';
+//@import 'highlight.js/styles/dark.css';
 
 :root {
   --background-color: #{$background-color-light};
