@@ -89,7 +89,7 @@ try {
     const commands = new Commands();
     commands.grep({ path: '.', fileType: ['ts'], pattern: 'export Class' }, (err: any, res: any) => {
       if (err) event.reply('git-command-result', `error: ${err}`);
-      else event.reply('git-command-result', `resp: ${res}`);
+      else event.reply('git-command-result', res);
     });
   });
   ipcMain.on('grep-blame', async (event, arg) => {
@@ -102,7 +102,7 @@ try {
     try {
       const result = await grepSearch.search();
       console.log(result);
-      event.reply('git-command-result', `resp: ${result}`);
+      event.reply('git-command-result', result);
     } catch (error) {
       event.reply('git-command-result', `error: ${error}`);
       console.error(error);

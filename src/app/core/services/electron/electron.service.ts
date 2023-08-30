@@ -58,7 +58,7 @@ export class ElectronService {
     console.log('here');
     this.ipcRenderer.send('grep-blame');
 
-    this.ipcRenderer.on('git-command-result', (event, arg: string[]) => {
+    this.ipcRenderer.on('git-command-result', (event, arg: string[][]) => {
       console.log('fe1', JSON.stringify(arg, null, 2));
       this.result = arg;
     });

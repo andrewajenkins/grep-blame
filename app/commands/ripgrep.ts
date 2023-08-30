@@ -15,7 +15,7 @@ export class RipGrep implements RipGrepSearch {
     this.directory = data.directory || '.';
   }
 
-  public async search(): Promise<string[]> {
+  public async search(): Promise<string[][]> {
     const results: any = await this.doGrep();
 
     return this.doBlame(results);
@@ -49,8 +49,8 @@ export class RipGrep implements RipGrepSearch {
     });
   }
 
-  private async doBlame(results: string): Promise<string[]> {
-    const blameResults: string[] = [];
+  private async doBlame(results: string): Promise<string[][]> {
+    const blameResults: string[][] = [];
     const jsonResults = results
       .split('\n')
       .filter((line) => line)
@@ -63,7 +63,7 @@ export class RipGrep implements RipGrepSearch {
         console.log('filePath:', filePath, 'lineNumber:', lineNumber);
         try {
           const blame = await this.gitBlame(filePath, lineNumber);
-          blameResults.push(blame);
+          blameResults.push(blame.split('\n'));
         } catch (error) {
           console.error(`Error blaming ${filePath}:${lineNumber}:`, error);
         }
@@ -77,7 +77,7 @@ export class RipGrep implements RipGrepSearch {
     return new Promise((resolve, reject) => {
       const git = spawn('git', ['blame', '-L', `${lineNumber},${lineNumber}`, filePath]);
 
-      let result = '';
+      let result = `${filePath}:${lineNumber}`;
       let error = '';
 
       git.stdout.on('data', (data) => {
@@ -98,20 +98,3 @@ export class RipGrep implements RipGrepSearch {
     });
   }
 }
-
-// Usage example:
-
-// (async () => {
-//   const fileTypes = ['ts', 'py'];
-//   const pattern = 'pattern_to_search';
-//   const directory = '/path/to/directory';
-//
-//   const ripGrepSearch = new RipGrepSearch(fileTypes, pattern, directory);
-//
-//   try {
-//     const result = await ripGrepSearch.search();
-//     console.log(result);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// })();
