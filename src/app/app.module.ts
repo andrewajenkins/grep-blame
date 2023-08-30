@@ -20,6 +20,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { PreviewComponent } from './preview/preview.component';
+import { PreviewWindowComponent } from './preview/preview-window/preview-window.component';
+import { PreviewTableComponent } from './preview/preview-table/preview-table.component';
+import { MatTableModule } from '@angular/material/table';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
@@ -46,6 +49,7 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
         deps: [HttpClient],
       },
     }),
+    MatTableModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

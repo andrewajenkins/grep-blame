@@ -1,0 +1,14 @@
+@import 'src/styles/variables';
+:host {
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
+}
+table {
+  width: 100%;
+}
+td , .mat-mdc-header-cell{
+  color: var(--text-color) !important;
+}
+.mat-mdc-cell, .mat-mdc-header-cell {
+  border-bottom-color: var(--text-color) !important;
+}

@@ -1,0 +1,30 @@
+<p>preview-table works!</p>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="fileName">
+    <th mat-header-cell *matHeaderCellDef>File name</th>
+    <td mat-cell *matCellDef="let element">{{ element.fileName }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="commit">
+    <th mat-header-cell *matHeaderCellDef>Commit</th>
+    <td mat-cell *matCellDef="let element">{{ element.commit }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="blame">
+    <th mat-header-cell *matHeaderCellDef>Blame</th>
+    <td mat-cell *matCellDef="let element">{{ element.blame }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="lineNum">
+    <th mat-header-cell *matHeaderCellDef>Line number</th>
+    <td mat-cell *matCellDef="let element">{{ element.lineNum }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="content">
+    <th mat-header-cell *matHeaderCellDef>Content</th>
+    <td mat-cell *matCellDef="let element">{{ element.content }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
