@@ -55,10 +55,11 @@ export class ElectronService {
   }
 
   doGrep() {
-    this.ipcRenderer.send('run-git-command', 'git status');
+    console.log('here');
+    this.ipcRenderer.send('grep-blame');
 
-    this.ipcRenderer.on('git-command-result', (event, arg) => {
-      console.log(arg);
+    this.ipcRenderer.on('git-command-result', (event, arg: string[]) => {
+      console.log('fe1', JSON.stringify(arg, null, 2));
     });
   }
 }

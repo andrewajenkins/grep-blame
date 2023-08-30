@@ -2,12 +2,19 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import { exec } from 'child_process';
+import { simpleGit, SimpleGit, CleanOptions } from 'simple-git';
+import { Commands } from './commands/grep';
+import { RipGrep } from './commands/ripgrep';
+import { PlatformPath } from 'path';
+
+const git: SimpleGit = simpleGit().clean(CleanOptions.FORCE);
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
   serve = args.some((val) => val === '--serve');
 
 function createWindow(): BrowserWindow {
+  console.log('creating window!');
   const size = screen.getPrimaryDisplay().workAreaSize;
 
   // Create the browser window.
@@ -77,14 +84,29 @@ try {
     }
   });
 
-  ipcMain.on('run-git-command', (event, arg) => {
-    exec(arg, (error, stdout, stderr) => {
-      if (error) {
-        event.reply('git-command-result', `error: ${error}`);
-        return;
-      }
-      event.reply('git-command-result', stdout);
+  ipcMain.on('grep-command', (event, arg) => {
+    console.log('branch:', git.branch());
+    const commands = new Commands();
+    commands.grep({ path: '.', fileType: ['ts'], pattern: 'export Class' }, (err: any, res: any) => {
+      if (err) event.reply('git-command-result', `error: ${err}`);
+      else event.reply('git-command-result', `resp: ${res}`);
     });
+  });
+  ipcMain.on('grep-blame', async (event, arg) => {
+    const fileTypes = ['ts', 'py'];
+    const pattern = 'export class';
+    const directory = './';
+
+    const grepSearch = new RipGrep({ fileTypes, pattern, directory });
+
+    try {
+      const result = await grepSearch.search();
+      console.log(result);
+      event.reply('git-command-result', `resp: ${result}`);
+    } catch (error) {
+      event.reply('git-command-result', `error: ${error}`);
+      console.error(error);
+    }
   });
 } catch (e) {
   console.error(e);

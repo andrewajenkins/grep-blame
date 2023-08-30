@@ -13,11 +13,13 @@ export class MainToolbarComponent {
     private electron: ElectronService,
   ) {}
   toggleTheme() {
+    console.log('tobbleTheme');
     const isDarkTheme = this.themeService.isDarkTheme();
     this.themeService.setDarkTheme(!isDarkTheme);
   }
 
   gitStatus() {
+    console.log('gitStatus');
     this.electron.doGrep();
   }
 }
