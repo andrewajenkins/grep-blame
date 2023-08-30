@@ -9,5 +9,6 @@
   "main": "main.js",
   "private": true,
   "dependencies": {
+    "simple-git": "^3.19.1"
   }
 }

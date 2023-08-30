@@ -38,6 +38,7 @@
     "electron:local": "npm run build:prod && electron .",
     "electron:build": "npm run build:prod && electron-builder build --publish=never",
     "electron:wait": "wait-on tcp:4200",
+    "electron:dev": "tsc -p tsconfig.dev.json",
     "test": "ng test --watch=false",
     "test:watch": "ng test",
     "e2e": "npm run build:prod && playwright test -c e2e/playwright.config.ts e2e/",
