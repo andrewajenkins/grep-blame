@@ -10,7 +10,7 @@ import { ElectronService } from '../../core/services';
 })
 export class PreviewTableComponent {
   @Input() dataSource: IRipGrepResult[] = [];
-  displayedColumns = ['fileName', 'commit', 'blame', 'dateTime', 'lineNum'];
+  displayedColumns = ['dateTime', 'blame', 'fileName', 'lineNum', 'commit'];
 
   constructor(
     private electron: ElectronService,
@@ -20,8 +20,14 @@ export class PreviewTableComponent {
   ngOnInit() {
     this.electron.electron$.subscribe((res) => {
       if (res.action == 'grep') {
-        console.log('table grep data', res.payload);
-        this.dataSource = res.payload;
+        const payload = res.payload.sort((a: IRipGrepResult, b: IRipGrepResult) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          return new Date(b.dateTime as string) - new Date(a.dateTime as string);
+        });
+
+        console.log('table grep data', payload);
+        this.dataSource = payload;
         this.cdRef.detectChanges();
       }
     });
