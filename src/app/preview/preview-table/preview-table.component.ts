@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { IRipGrepResult } from '../../../../app/commands/ripgrep';
 import { Action, CommandService } from '../../core/services/command/command.service';
 import { ElectronService } from '../../core/services';
@@ -13,8 +13,8 @@ export class PreviewTableComponent {
   displayedColumns = ['fileName', 'commit', 'blame', 'dateTime', 'lineNum'];
 
   constructor(
-    private commandService: CommandService,
     private electron: ElectronService,
+    private cdRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -22,6 +22,7 @@ export class PreviewTableComponent {
       if (res.action == 'grep') {
         console.log('table grep data', res.payload);
         this.dataSource = res.payload;
+        this.cdRef.detectChanges();
       }
     });
     const test = [];
@@ -40,6 +41,6 @@ export class PreviewTableComponent {
 
   openPreview(row: IRipGrepResult) {
     console.log('openPreview', row);
-    this.electron.openPage(row.fileName as string);
+    this.electron.openPage(row.fileName as string, parseInt(row.lineNum as string));
   }
 }

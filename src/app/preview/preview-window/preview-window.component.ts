@@ -28,15 +28,30 @@ export class PreviewWindowComponent {
           let content = `<pre><code class="`;
           content += res.fileName.slice(-2);
           content += `">`;
-          content += res.payload;
+          content += this.processTargetLine(res.payload, res.lineNum);
           content += `</code></pre>\n`;
           this.previewContent = content;
           this.cdRef.detectChanges();
+          this.highlightCode();
         } catch (e) {
           alert(e);
         }
       }
     });
+  }
+  processTargetLine(payload: string, lineNum: number) {
+    const stringArray = payload.split('\n');
+    const highlightedArray = [];
+    let spacer;
+    for (let i = 0; i < stringArray.length; i++) {
+      if (i == lineNum - 1) {
+        highlightedArray.push(`---> ${stringArray[i]}`);
+      } else {
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+        highlightedArray.push(i + 1 + ': ' + stringArray[i]);
+      }
+    }
+    return highlightedArray.join('\n');
   }
 
   ngAfterViewInit() {

@@ -72,14 +72,15 @@ export class ElectronService {
     return this.electron$;
   }
 
-  openPage(fileName: string) {
-    this.ipcRenderer.send('get-page', fileName);
+  openPage(fileName: string, lineNum: number) {
+    this.ipcRenderer.send('get-page', fileName, lineNum);
 
     this.ipcRenderer.on('page-results', (event, arg: string[][]) => {
       this.electronSubject.next({
         action: 'page',
         payload: arg,
         fileName: fileName,
+        lineNum: lineNum,
       });
     });
   }
