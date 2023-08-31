@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { RipGrepResult } from '../../../../app/commands/ripgrep';
+import { IRipGrepResult } from '../../../../app/commands/ripgrep';
+import { Action, CommandService } from '../../core/services/command/command.service';
+import { ElectronService } from '../../core/services';
 
 @Component({
   selector: 'app-preview-table',
@@ -7,9 +9,21 @@ import { RipGrepResult } from '../../../../app/commands/ripgrep';
   styleUrls: ['./preview-table.component.scss'],
 })
 export class PreviewTableComponent {
-  @Input() dataSource: RipGrepResult[] = [];
+  @Input() dataSource: IRipGrepResult[] = [];
   displayedColumns = ['fileName', 'commit', 'blame', 'dateTime', 'lineNum'];
+
+  constructor(
+    private commandService: CommandService,
+    private electron: ElectronService,
+  ) {}
+
   ngOnInit() {
+    this.electron.electron$.subscribe((res) => {
+      if (res.action == 'grep') {
+        console.log('table grep data', res.payload);
+        this.dataSource = res.payload;
+      }
+    });
     const test = [];
     for (let i = 0; i < 20; i++) {
       test.push({
@@ -22,5 +36,10 @@ export class PreviewTableComponent {
       });
     }
     this.dataSource = test;
+  }
+
+  openPreview(row: IRipGrepResult) {
+    console.log('openPreview', row);
+    this.electron.openPage(row.fileName as string);
   }
 }

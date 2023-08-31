@@ -4,7 +4,7 @@ export interface RipGrepSearch {
   pattern: string;
   directory: string;
 }
-export interface RipGrepResult {
+export interface IRipGrepResult {
   fileName: string;
   commit: string;
   blame: string;

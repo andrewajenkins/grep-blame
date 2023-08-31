@@ -20,19 +20,12 @@ export class MainToolbarComponent {
     this.result = this.electron.result;
   }
   toggleTheme() {
-    console.log('tobbleTheme');
     const isDarkTheme = this.themeService.isDarkTheme();
     this.themeService.setDarkTheme(!isDarkTheme);
   }
 
-  gitStatus() {
+  gitBlame() {
     console.log('gitStatus');
-    this.result = this.electron.doGrep().subscribe((res) => {
-      this.result = res;
-      this.commandService.send({
-        action: Action.PREVIEW_DATA,
-        payload: res,
-      });
-    });
+    this.result = this.electron.doGrep().subscribe((res) => {});
   }
 }

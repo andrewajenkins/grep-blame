@@ -31,7 +31,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['content']"></tr>
+    <tr mat-row (click)="openPreview(row)" *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-row (click)="openPreview(row)" *matRowDef="let row; columns: ['content']"></tr>
   </table>
 </div>

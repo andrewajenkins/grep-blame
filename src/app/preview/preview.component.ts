@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Action, CommandService } from '../core/services/command/command.service';
-import { RipGrepResult } from '../../../app/commands/ripgrep';
+import { IRipGrepResult } from '../../../app/commands/ripgrep';
 
 @Component({
   selector: 'app-preview',
@@ -8,7 +8,7 @@ import { RipGrepResult } from '../../../app/commands/ripgrep';
   styleUrls: ['./preview.component.scss'],
 })
 export class PreviewComponent {
-  dataSource!: RipGrepResult[];
+  dataSource!: IRipGrepResult[];
   displayedColumns = ['fileName', 'commit', 'blame', 'lineNum', 'content'];
   constructor(private commandService: CommandService) {}
 
@@ -17,7 +17,7 @@ export class PreviewComponent {
     this.commandService.action$.subscribe((cmd) => {
       if (cmd.action === Action.PREVIEW_DATA) {
         console.log('PREVIEW_DATA');
-        this.dataSource = cmd.payload.filter((item: RipGrepResult) => item.fileName);
+        this.dataSource = cmd.payload.filter((item: IRipGrepResult) => item.fileName);
       }
     });
   }

@@ -8,6 +8,7 @@ export interface Command<T> {
 
 export enum Action {
   PREVIEW_DATA = 'ACTION_PREVIEW_DATA',
+  OPEN_PAGE = 'ACTION_OPEN_PAGE',
 }
 
 @Injectable({

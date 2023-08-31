@@ -108,6 +108,19 @@ try {
       console.error(error);
     }
   });
+  ipcMain.on('get-page', async (event, arg) => {
+    fs.readFile(arg, 'utf8', (err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      try {
+        event.reply('page-results', data);
+      } catch (error) {
+        event.reply('page-results', `error: ${error}`);
+      }
+    });
+  });
 } catch (e) {
   console.error(e);
   // Catch Error

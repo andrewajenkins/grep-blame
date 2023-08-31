@@ -63,10 +63,24 @@ export class ElectronService {
     this.ipcRenderer.send('grep-blame');
 
     this.ipcRenderer.on('git-command-result', (event, arg: string[][]) => {
-      console.log('fe1', JSON.stringify(arg, null, 2));
       this.result = arg;
-      this.electronSubject.next(arg);
+      this.electronSubject.next({
+        action: 'grep',
+        payload: arg,
+      });
     });
     return this.electron$;
+  }
+
+  openPage(fileName: string) {
+    this.ipcRenderer.send('get-page', fileName);
+
+    this.ipcRenderer.on('page-results', (event, arg: string[][]) => {
+      this.electronSubject.next({
+        action: 'page',
+        payload: arg,
+        fileName: fileName,
+      });
+    });
   }
 }
