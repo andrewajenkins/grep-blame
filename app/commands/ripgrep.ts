@@ -63,8 +63,10 @@ export class RipGrep implements RipGrepSearch {
       .split('\n')
       .filter((line) => line)
       .map((line) => JSON.parse(line));
-
+    let i = 0;
     for (const result of jsonResults) {
+      i++;
+      if (i > 20) break;
       if (result.type === 'match') {
         const filePath = result.data.path.text;
         const lineNumber = result.data.line_number;

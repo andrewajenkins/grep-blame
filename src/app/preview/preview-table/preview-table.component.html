@@ -1,4 +1,14 @@
 <p>preview-table works!</p>
+<form [formGroup]="grepForm">
+  <mat-form-field>
+    <mat-label>Path</mat-label>
+    <input matInput formControlName="path" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Search pattern</mat-label>
+    <input matInput formControlName="pattern" />
+  </mat-form-field>
+</form>
 <div class="table-container">
   <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
     <ng-container matColumnDef="fileName">

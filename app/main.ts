@@ -94,8 +94,8 @@ try {
   });
   ipcMain.on('grep-blame', async (event, arg) => {
     const fileTypes = ['ts', 'py'];
-    const pattern = 'export class';
-    const directory = './';
+    const pattern = arg.pattern;
+    const directory = arg.directory;
 
     const grepSearch = new RipGrep({ fileTypes, pattern, directory });
 

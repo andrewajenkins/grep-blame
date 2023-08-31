@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { IRipGrepResult } from '../../../../app/commands/ripgrep';
-import { Action, CommandService } from '../../core/services/command/command.service';
 import { ElectronService } from '../../core/services';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Action, CommandService } from '../../core/services/command/command.service';
 
 @Component({
   selector: 'app-preview-table',
@@ -11,13 +12,24 @@ import { ElectronService } from '../../core/services';
 export class PreviewTableComponent {
   @Input() dataSource: IRipGrepResult[] = [];
   displayedColumns = ['dateTime', 'blame', 'fileName', 'lineNum', 'commit'];
+  grepForm: FormGroup = this.fb.group({
+    pattern: [''],
+    path: [''],
+  });
 
   constructor(
     private electron: ElectronService,
+    private commandService: CommandService,
     private cdRef: ChangeDetectorRef,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit() {
+    this.commandService.action$.subscribe((cmd) => {
+      if (cmd.action == Action.DO_GREP) {
+        this.electron.doGrep(this.grepForm.value).subscribe((res) => {});
+      }
+    });
     this.electron.electron$.subscribe((res) => {
       if (res.action == 'grep') {
         const payload = res.payload.sort((a: IRipGrepResult, b: IRipGrepResult) => {

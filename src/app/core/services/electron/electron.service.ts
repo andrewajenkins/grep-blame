@@ -58,9 +58,9 @@ export class ElectronService {
     return !!(window && window.process && window.process.type);
   }
 
-  doGrep() {
-    console.log('here');
-    this.ipcRenderer.send('grep-blame');
+  doGrep(grepValue: any) {
+    alert('doGrep in electron.service:\n' + JSON.stringify(grepValue));
+    this.ipcRenderer.send('grep-blame', grepValue);
 
     this.ipcRenderer.on('git-command-result', (event, arg: string[][]) => {
       this.result = arg;

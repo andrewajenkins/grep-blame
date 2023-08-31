@@ -12,6 +12,10 @@ import { PreviewComponent } from '../preview/preview.component';
 import { AngularSplitModule } from 'angular-split';
 import { PreviewWindowComponent } from '../preview/preview-window/preview-window.component';
 import { PreviewTableComponent } from '../preview/preview-table/preview-table.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [HomeComponent, PreviewComponent, PreviewWindowComponent, PreviewTableComponent],
@@ -25,6 +29,10 @@ import { PreviewTableComponent } from '../preview/preview-table/preview-table.co
     NgIf,
     MatIconModule,
     AngularSplitModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    ReactiveFormsModule,
   ],
 })
 export class HomeModule {}

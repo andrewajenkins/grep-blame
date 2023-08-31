@@ -26,6 +26,8 @@ export class MainToolbarComponent {
 
   gitBlame() {
     console.log('gitStatus');
-    this.result = this.electron.doGrep().subscribe((res) => {});
+    this.commandService.send({
+      action: Action.DO_GREP,
+    });
   }
 }

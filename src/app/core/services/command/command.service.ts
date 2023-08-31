@@ -3,12 +3,13 @@ import { Subject } from 'rxjs';
 
 export interface Command<T> {
   action: T;
-  payload: any;
+  payload?: any;
 }
 
 export enum Action {
   PREVIEW_DATA = 'ACTION_PREVIEW_DATA',
   OPEN_PAGE = 'ACTION_OPEN_PAGE',
+  DO_GREP = 'ACTION_DO_GREP',
 }
 
 @Injectable({
