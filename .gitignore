@@ -11,6 +11,10 @@ src/**/*.js
 app/**/*.js
 !src/karma.conf.js
 *.js.map
+/release-builds
+*.dmg
+
+package-lock.json
 
 # dependencies
 node_modules

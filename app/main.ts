@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, Notification, dialog, ipcMain, screen } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import { exec } from 'child_process';
@@ -99,6 +99,9 @@ try {
       properties: ['openDirectory'],
     });
 
+    process.env.PATH = '/usr/local/bin:' + process.env.PATH;
+    // new Notification({ title: 'process.env.PATH: ', body: process.env.PATH }).show();
+    await dialog.showMessageBox(win!, { title: 'process.env.PATH: ', message: process.env.PATH });
     const grepSearch = new RipGrep({ fileTypes, pattern, directory: directory.filePaths[0] });
 
     try {
