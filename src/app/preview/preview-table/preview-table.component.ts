@@ -14,7 +14,6 @@ export class PreviewTableComponent {
   displayedColumns = ['dateTime', 'blame', 'fileName', 'lineNum', 'commit'];
   grepForm: FormGroup = this.fb.group({
     pattern: [''],
-    path: [''],
   });
 
   constructor(
@@ -27,6 +26,10 @@ export class PreviewTableComponent {
   ngOnInit() {
     this.commandService.action$.subscribe((cmd) => {
       if (cmd.action == Action.DO_GREP) {
+        if (!this.grepForm.value.pattern) {
+          alert('Please enter a pattern');
+          return;
+        }
         this.electron.doGrep(this.grepForm.value).subscribe((res) => {});
       }
     });

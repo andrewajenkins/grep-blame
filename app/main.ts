@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, screen } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import { exec } from 'child_process';
@@ -95,16 +95,18 @@ try {
   ipcMain.on('grep-blame', async (event, arg) => {
     const fileTypes = ['ts', 'py'];
     const pattern = arg.pattern;
-    const directory = arg.directory;
+    const directory = await dialog.showOpenDialog({
+      properties: ['openDirectory'],
+    });
 
-    const grepSearch = new RipGrep({ fileTypes, pattern, directory });
+    const grepSearch = new RipGrep({ fileTypes, pattern, directory: directory.filePaths[0] });
 
     try {
       const result = await grepSearch.search();
       console.log(result);
       event.reply('git-command-result', result);
     } catch (error) {
-      event.reply('git-command-result', `error: ${error}`);
+      event.reply('git-command-result', []);
       console.error(error);
     }
   });
