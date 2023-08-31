@@ -1,12 +1,13 @@
-<span>Preview works!</span>
-<div style="width: auto; height: auto">
-  <as-split direction="horizontal">
-    <as-split-area [size]="50">
-      <app-preview-table [dataSource]="dataSource"></app-preview-table>
-    </as-split-area>
-    <as-split-area [size]="60">
-      <app-preview-window></app-preview-window>
-    </as-split-area>
-  </as-split>
+<div style="width: 100%">
+  <div>
+    <as-split direction="horizontal">
+      <as-split-area [size]="50">
+        <app-preview-table [dataSource]="dataSource"></app-preview-table>
+      </as-split-area>
+      <as-split-area [size]="50">
+        <app-preview-window></app-preview-window>
+      </as-split-area>
+    </as-split>
+  </div>
 </div>
-<pre>data: {{ dataSource | json }}</pre>
+<!--<pre>data: {{ dataSource | json }}</pre>-->
