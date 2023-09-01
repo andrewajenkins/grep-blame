@@ -23,7 +23,7 @@ export class RipGrep implements RipGrepSearch {
     this.directory = data.directory || '.';
   }
 
-  public async search(): Promise<string[][]> {
+  public async search(): Promise<IRipGrepResult[]> {
     const results: any = await this.doGrep();
 
     return this.doBlame(results);
@@ -66,7 +66,7 @@ export class RipGrep implements RipGrepSearch {
     let i = 0;
     for (const result of jsonResults) {
       i++;
-      if (i > 20) break;
+      if (i > 40) break;
       if (result.type === 'match') {
         const filePath = result.data.path.text;
         const lineNumber = result.data.line_number;

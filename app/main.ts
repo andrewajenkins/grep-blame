@@ -14,15 +14,15 @@ const args = process.argv.slice(1),
   serve = args.some((val) => val === '--serve');
 
 function createWindow(): BrowserWindow {
-  console.log('creating window!');
   const size = screen.getPrimaryDisplay().workAreaSize;
+  process.env.PATH = '/usr/local/bin:' + process.env.PATH; // add ripgrep to path
 
   // Create the browser window.
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    width: size.width,
-    height: size.height,
+    width: 1920,
+    height: 1080,
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: serve,
@@ -99,18 +99,23 @@ try {
       properties: ['openDirectory'],
     });
 
-    process.env.PATH = '/usr/local/bin:' + process.env.PATH;
-    // new Notification({ title: 'process.env.PATH: ', body: process.env.PATH }).show();
-    await dialog.showMessageBox(win!, { title: 'process.env.PATH: ', message: process.env.PATH });
+    await dialog.showMessageBox(win!, { title: 'process.env.PATH: ', message: process.env.PATH! });
     const grepSearch = new RipGrep({ fileTypes, pattern, directory: directory.filePaths[0] });
 
     try {
       const result = await grepSearch.search();
-      console.log(result);
+      // await dialog.showMessageBox(win!, {
+      //   title: 'success, results: ',
+      //   message: JSON.stringify(
+      //     result.map((result) => result.fileName),
+      //     null,
+      //     2,
+      //   ),
+      // });
       event.reply('git-command-result', result);
     } catch (error) {
       event.reply('git-command-result', []);
-      console.error(error);
+      await dialog.showMessageBox(win!, { title: 'error: ', message: JSON.stringify(error, null, 2) });
     }
   });
   ipcMain.on('get-page', async (event, arg) => {
